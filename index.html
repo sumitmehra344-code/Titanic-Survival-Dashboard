@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYSTEMATIC SURVIVAL: Determinants of the Titanic Disaster</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            serif: ['"Cinzel"', 'serif'],
+          },
+          colors: {
+            blueprint: {
+              950: '#040b14',
+              900: '#071322',
+              850: '#0b1d33',
+              800: '#102742',
+              750: '#17365d',
+              700: '#1f4675',
+              border: '#1b3b64',
+              borderBright: '#2a5a94',
+              accent: '#38bdf8',
+              glow: 'rgba(56, 189, 248, 0.15)',
+            },
+            copper: {
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+            },
+            disaster: {
+              rose: '#f43f5e',
+              red: '#e11d48',
+              crimson: '#be123c',
+              dark: '#4c0519',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Technical grid background */
+    .blueprint-grid-canvas {
+      background-color: #050e1a;
+      background-size: 40px 40px, 8px 8px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+        linear-gradient(to right, rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
+    }
+
+    /* Precision Technical Corner Brackets */
+    .blueprint-box {
+      position: relative;
+      background: rgba(11, 29, 51, 0.72);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+    }
+    .corner-bracket {
+      position: relative;
+    }
+    .corner-bracket::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid #38bdf8;
+      border-left: 2px solid #38bdf8;
+      pointer-events: none;
+    }
+    .corner-bracket::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 2px solid #38bdf8;
+      border-right: 2px solid #38bdf8;
+      pointer-events: none;
+    }
+
+    .corner-copper::before { border-color: #f59e0b; }
+    .corner-copper::after { border-color: #f59e0b; }
+
+    /* Slide Transitions */
+    .slide-view {
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide-inactive {
+      opacity: 0;
+      transform: scale(0.97) translateY(12px);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+    .slide-current {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Custom Scrollbar for Drawer */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #071322;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1b3b64;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+  </style>
+</head>
+
+<body class="blueprint-grid-canvas text-slate-100 font-sans min-h-screen flex flex-col justify-between overflow-hidden select-none">
+
+  <header class="h-16 border-b border-blueprint-border/80 bg-blueprint-900/90 backdrop-blur-md px-4 sm:px-8 flex items-center justify-between z-50">
+    <div class="flex items-center space-x-3 sm:space-x-4">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-copper-600 via-amber-600 to-copper-700 flex items-center justify-center font-mono font-extrabold text-white text-sm shadow-lg shadow-copper-600/30 border border-amber-300/30">
+        SS
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-mono tracking-widest text-blueprint-accent uppercase font-bold">SYSTEMATIC SURVIVAL</span>
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400 text-[10px] font-mono hidden md:inline">// DECK RUNNER v3.0</span>
+        </div>
+        <h1 class="text-xs sm:text-sm font-semibold tracking-tight text-slate-200 truncate max-w-[240px] sm:max-w-md">
+          Deconstructing the Sociological Blueprint
+        </h1>
+      </div>
+    </div>
+
+    <!-- Quick Telemetry & Utility Controls -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <!-- Slide Index Indicator -->
+      <div class="flex items-center space-x-2 bg-blueprint-950/80 px-3 py-1.5 rounded-md border border-blueprint-border text-xs font-mono text-slate-300">
+        <span class="text-copper-400 font-semibold">SLIDE</span>
+        <span id="header-cur-slide" class="font-bold text-white">01</span>
+        <span class="text-slate-600">/</span>
+        <span id="header-tot-slide" class="text-slate-400">08</span>
+      </div>
+
+      <!-- Quick Copy Key Stats Button -->
+      <button id="btn-copy-stats" title="Copy Key Statistics to Clipboard" class="px-2.5 py-1.5 rounded-md bg-blueprint-800 hover:bg-blueprint-750 border border-blueprint-border text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-blueprint-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+        <span class="hidden lg:inline" id="copy-text-label">Copy Stats</span>
+      </button>
+
+      <!-- Slide Directory Jump -->
+      <button id="btn-index-toggle" title="Open Slide Index" class="px-3 py-1.5 rounded-md bg-blueprint-800 hover:bg-blueprint-700 border border-blueprint-border text-xs font-mono text-slate-200 transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-blueprint-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <span class="hidden sm:inline">Index</span>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="btn-fullscreen" title="Toggle Fullscreen Mode" class="p-2 rounded-md hover:bg-blueprint-800 border border-transparent hover:border-blueprint-border text-slate-300 hover:text-white transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 relative flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-hidden">
+    <div class="w-full max-w-6xl aspect-[16/9] min-h-[540px] max-h-[82vh] relative flex flex-col justify-between">
+
+      <!-- ================= SLIDE 1: TITLE & THESIS ================= -->
+      <section id="slide-1" class="slide-view slide-current w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-copper-500/20 text-copper-400 border border-copper-500/30 font-bold">EXECUTIVE BRIEFING</span>
+            <span class="text-xs font-mono text-slate-400 hidden sm:inline">// RMS TITANIC EVACUATION AUDIT</span>
+          </div>
+          <span class="text-[11px] font-mono text-blueprint-accent tracking-wider">PROJECT ARTIFACT</span>
+        </div>
+
+        <div class="my-auto space-y-5 max-w-4xl">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blueprint-900/90 border border-blueprint-accent/40 text-blueprint-accent text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-copper-400 animate-ping"></span>
+            <span class="tracking-wide">EMPIRICAL DATA ARCHIVE (N = 891)</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans">
+            SYSTEMATIC SURVIVAL: <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-copper-400 via-amber-300 to-blueprint-accent">
+              Deconstructing the Sociological Blueprint
+            </span>
+          </h1>
+
+          <p class="text-slate-300 text-sm sm:text-base md:text-lg font-normal leading-relaxed max-w-3xl">
+            Survival was not random chaos. Cultural lore presumes an egalitarian struggle against nature; empirical evidence reveals a strictly ordered triage dictated by <span class="text-copper-400 font-semibold underline decoration-copper-500/40 underline-offset-4">institutional protocol</span>, <span class="text-blueprint-accent font-semibold underline decoration-blueprint-accent/40 underline-offset-4">socioeconomic status</span>, and <span class="text-emerald-400 font-semibold underline decoration-emerald-500/40 underline-offset-4">demographic priority</span>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-blueprint-border/60 text-xs font-mono">
+          <div class="flex items-center space-x-3 bg-blueprint-900/60 p-3 rounded-lg border border-blueprint-border/60">
+            <div class="w-2 h-2 rounded-full bg-disaster-rose"></div>
+            <div>
+              <div class="text-white font-bold">GENDER MANDATE</div>
+              <div class="text-[11px] text-slate-400">3.9x female multiplier</div>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 bg-blueprint-900/60 p-3 rounded-lg border border-blueprint-border/60">
+            <div class="w-2 h-2 rounded-full bg-copper-400"></div>
+            <div>
+              <div class="text-white font-bold">DECK STRATIFICATION</div>
+              <div class="text-[11px] text-slate-400">2.6x 1st-class advantage</div>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 bg-blueprint-900/60 p-3 rounded-lg border border-blueprint-border/60">
+            <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+            <div>
+              <div class="text-white font-bold">INTERSECTIONAL PEAK</div>
+              <div class="text-[11px] text-slate-400">96.8% vs 13.5% extremes</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 2: THE BASELINE REALITY ================= -->
+      <section id="slide-2" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">01 // POPULATION BENCHMARK</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">The Anchor Metric</span>
+          </div>
+          <span class="text-xs font-mono text-blueprint-accent">BASELINE CHANCE: 38.4%</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+          <div class="lg:col-span-7 space-y-5">
+            <div>
+              <span class="text-xs font-mono tracking-widest text-slate-400 uppercase">Population Manifest</span>
+              <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-1">The Baseline Reality</h2>
+              <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+                Across all 891 tracked passengers, survival was the statistical exception, not the rule. Baseline odds were stacked heavily toward mortality: nearly two out of every three passengers perished.
+              </p>
+            </div>
+
+            <!-- KPI Metric Cards -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="p-3 sm:p-4 rounded-xl bg-blueprint-900/80 border border-blueprint-border text-center">
+                <span class="text-[10px] font-mono text-slate-400 uppercase">TRACKED POOL</span>
+                <div class="text-2xl sm:text-4xl font-extrabold text-white font-mono mt-1">891</div>
+                <span class="text-[10px] text-slate-400 font-mono">100% Manifest</span>
+              </div>
+
+              <div class="p-3 sm:p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-center">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase font-semibold">SURVIVORS</span>
+                <div class="text-2xl sm:text-4xl font-extrabold text-emerald-300 font-mono mt-1">342</div>
+                <span class="text-[10px] font-bold text-emerald-400 font-mono">38.4% Rate</span>
+              </div>
+
+              <div class="p-3 sm:p-4 rounded-xl bg-disaster-dark/50 border border-disaster-red/40 text-center">
+                <span class="text-[10px] font-mono text-rose-400 uppercase font-semibold">CASUALTIES</span>
+                <div class="text-2xl sm:text-4xl font-extrabold text-rose-300 font-mono mt-1">549</div>
+                <span class="text-[10px] font-bold text-rose-400 font-mono">61.6% Fatality</span>
+              </div>
+            </div>
+
+            <!-- Proportional Ratio Gauge -->
+            <div class="space-y-1.5 pt-2">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-emerald-400 font-semibold">Survivors: 38.4% (342)</span>
+                <span class="text-rose-400 font-semibold">Fatalities: 61.6% (549)</span>
+              </div>
+              <div class="h-4 w-full bg-blueprint-950 rounded-full overflow-hidden flex border border-blueprint-border p-0.5">
+                <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-l-full" style="width: 38.38%"></div>
+                <div class="h-full bg-gradient-to-r from-rose-700 to-red-600 rounded-r-full" style="width: 61.62%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Callout Context -->
+          <div class="lg:col-span-5 p-5 sm:p-6 rounded-xl bg-blueprint-900/60 border border-copper-500/30 corner-bracket corner-copper space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-copper-400 font-bold uppercase tracking-wider">CRITICAL DATA ANCHOR</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-copper-500/20 text-copper-300">BENCHMARK</span>
+            </div>
+            <h3 class="text-base font-bold text-white">The Law of Deviance</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              If lifeboats had been allocated purely by chance or physical footraces, all demographic subsets would cluster closely around the <strong>38.4% baseline</strong>.
+            </p>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Instead, observed rates fractured along societal fault lines—surging to <strong>96.8%</strong> for elite women and plunging to <strong>13.5%</strong> for working-class men.
+            </p>
+            <div class="p-2.5 bg-blueprint-950/80 rounded border border-blueprint-border text-[11px] font-mono text-slate-300 flex justify-between">
+              <span>Lifeboat Capacity Shortage:</span>
+              <span class="text-rose-400 font-bold">1,178 Unserved Souls</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>SOURCE: BOARD OF TRADE INQUIRY & PASSENGER MANIFESTS</span>
+          <span>FATALITY-TO-SURVIVAL RATIO: 1.6 : 1</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 3: THE GENDER PROTOCOL ================= -->
+      <section id="slide-3" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">02 // INSTITUTIONAL MANDATE</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">The Primary Triage Mechanism</span>
+          </div>
+          <span class="text-xs font-mono text-disaster-rose font-bold">3.9x GENDER ADVANTAGE</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+          <div class="lg:col-span-5 space-y-4">
+            <div class="inline-block px-2.5 py-1 rounded bg-disaster-red/20 border border-disaster-red/40 text-rose-300 text-xs font-mono font-bold">
+              +55.3% STATISTICAL DELTA
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+              Institutional Protocol Overrode All Factors
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Sex was the single most decisive sorting mechanism during the evacuation. Ship officers rigidly enforced the maritime mandate of <em>"women and children first"</em>, overriding strength, age, and individual panic.
+            </p>
+            <div class="p-3 bg-blueprint-900/70 rounded-xl border border-blueprint-border font-mono text-xs text-slate-300 space-y-1">
+              <div class="text-copper-400 font-bold">SURVIVAL COEFFICIENT:</div>
+              <div>Women held an absolute <strong>3.9x higher likelihood</strong> of surviving than their male counterparts.</div>
+            </div>
+          </div>
+
+          <!-- Graphical Breakdown Cards -->
+          <div class="lg:col-span-7 space-y-4">
+            <!-- Female Cohort Bar -->
+            <div class="p-4 sm:p-5 rounded-xl bg-blueprint-900/80 border-2 border-rose-500/40 relative">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-lg">♀</div>
+                  <div>
+                    <h3 class="text-sm sm:text-base font-bold text-white">Female Passenger Cohort</h3>
+                    <span class="text-xs text-slate-400 font-mono">233 Survivors / 314 Manifest</span>
+                  </div>
+                </div>
+                <div class="text-2xl sm:text-4xl font-extrabold text-rose-400 font-mono">74.2%</div>
+              </div>
+              <div class="w-full bg-blueprint-950 h-3 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-rose-600 via-rose-500 to-pink-400 h-full rounded-full" style="width: 74.2%"></div>
+              </div>
+              <div class="text-[11px] text-rose-300/80 mt-2 font-mono flex justify-between">
+                <span>Priority Loading Protocol</span>
+                <span>+35.8% Above Baseline</span>
+              </div>
+            </div>
+
+            <!-- Male Cohort Bar -->
+            <div class="p-4 sm:p-5 rounded-xl bg-blueprint-900/80 border border-slate-700 relative">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-lg">♂</div>
+                  <div>
+                    <h3 class="text-sm sm:text-base font-bold text-white">Male Passenger Cohort</h3>
+                    <span class="text-xs text-slate-400 font-mono">109 Survivors / 577 Manifest</span>
+                  </div>
+                </div>
+                <div class="text-2xl sm:text-4xl font-extrabold text-sky-400 font-mono">18.9%</div>
+              </div>
+              <div class="w-full bg-blueprint-950 h-3 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-sky-700 via-sky-600 to-sky-400 h-full rounded-full" style="width: 18.9%"></div>
+              </div>
+              <div class="text-[11px] text-sky-300/80 mt-2 font-mono flex justify-between">
+                <span>Systematic De-prioritization</span>
+                <span>-19.5% Below Baseline</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blueprint-950/60 rounded-lg border border-blueprint-border/60 text-xs text-slate-300 flex items-center gap-2.5">
+              <span class="text-copper-400 text-base">⚠️</span>
+              <span><strong>Execution Disparity:</strong> On port side under 2nd Officer Lightoller, protocol was interpreted as <em>"women and children only"</em>—leaving lifeboats lowered partially empty rather than admitting men.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>PORT VS STARBOARD LOGIC ENFORCEMENT</span>
+          <span>ODDS RATIO (FEMALE vs MALE): 12.35</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 4: SOCIOECONOMIC HIERARCHY ================= -->
+      <section id="slide-4" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">03 // PHYSICAL HIERARCHY</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">Deck Elevation & Proximity</span>
+          </div>
+          <span class="text-xs font-mono text-copper-400">2.6x ADVANTAGE: 1ST OVER 3RD CLASS</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+          <div class="lg:col-span-5 space-y-4">
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+              Physical Proximity Scaled Directly With Privilege
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Ticket class determined spatial architecture. First-class staterooms sat on Boat Deck and Decks A–C, steps away from open-air lifeboats.
+            </p>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Third-class steerage passengers occupied the deep lower hull (Decks E–G), facing complex multi-level mazes, locked immigration gates, and zero direct alarms.
+            </p>
+            <div class="p-3 bg-blueprint-900/80 rounded-lg border border-copper-500/30 text-xs font-mono text-copper-300">
+              CLASS PROGRESSION: 63.0% ➔ 47.3% ➔ 24.2%
+            </div>
+          </div>
+
+          <!-- Vessel Deck Elevation Visuals -->
+          <div class="lg:col-span-7 space-y-3">
+            <!-- 1st Class Deck -->
+            <div class="p-3.5 sm:p-4 rounded-xl bg-blueprint-900/90 border border-purple-400/40 relative group hover:border-purple-400 transition">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                  <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-xs font-bold">DECK A–C</span>
+                  <div>
+                    <h3 class="font-bold text-white text-sm sm:text-base">1st Class (Upper Hull Promenade)</h3>
+                    <span class="text-[11px] text-slate-400 font-mono">136 Survivors / 216 Manifest</span>
+                  </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-purple-300 font-mono">63.0%</div>
+              </div>
+              <div class="mt-2.5 w-full bg-blueprint-950 h-2.5 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-400 h-full rounded-full" style="width: 63%"></div>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
+                <span>Immediate Boat Deck access</span>
+                <span class="text-purple-300 font-semibold font-mono">+24.6% Above Baseline</span>
+              </div>
+            </div>
+
+            <!-- 2nd Class Deck -->
+            <div class="p-3.5 sm:p-4 rounded-xl bg-blueprint-900/90 border border-blue-400/40 relative group hover:border-blue-400 transition">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                  <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono text-xs font-bold">DECK D–E</span>
+                  <div>
+                    <h3 class="font-bold text-white text-sm sm:text-base">2nd Class (Middle Companionway)</h3>
+                    <span class="text-[11px] text-slate-400 font-mono">87 Survivors / 184 Manifest</span>
+                  </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-blue-300 font-mono">47.3%</div>
+              </div>
+              <div class="mt-2.5 w-full bg-blueprint-950 h-2.5 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-400 h-full rounded-full" style="width: 47.3%"></div>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
+                <span>Moderate stairwell access</span>
+                <span class="text-blue-300 font-semibold font-mono">+8.9% Above Baseline</span>
+              </div>
+            </div>
+
+            <!-- 3rd Class Deck -->
+            <div class="p-3.5 sm:p-4 rounded-xl bg-blueprint-900/90 border border-rose-500/30 relative group hover:border-rose-400 transition">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                  <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-xs font-bold">DECK F–G</span>
+                  <div>
+                    <h3 class="font-bold text-white text-sm sm:text-base">3rd Class (Steerage / Deep Hull)</h3>
+                    <span class="text-[11px] text-slate-400 font-mono">119 Survivors / 491 Manifest</span>
+                  </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-rose-400 font-mono">24.2%</div>
+              </div>
+              <div class="mt-2.5 w-full bg-blueprint-950 h-2.5 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-rose-700 to-red-500 h-full rounded-full" style="width: 24.2%"></div>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
+                <span>Locked bulkheads & language barriers</span>
+                <span class="text-rose-400 font-semibold font-mono">-14.2% Below Baseline</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>HARLAND & WOLFF ARCHITECTURAL BLUEPRINT</span>
+          <span>VERTICAL DISTANCE DIRECTLY CORRELATED WITH FATALITY</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 5: AGE ACCELERATION ================= -->
+      <section id="slide-5" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">04 // AGE ACCELERATION</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">Vulnerability Prioritization</span>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">CHILDREN SURVIVAL: 59.0%</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+          <div class="lg:col-span-6 space-y-4">
+            <div class="inline-block px-2.5 py-1 rounded bg-sky-500/20 border border-sky-500/30 text-sky-300 text-xs font-mono font-bold">
+              +20.6% LIFT OVER ADULT BASELINE
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+              Age Acted as an Independent Survival Accelerator
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Children under the age of 16 achieved a survival rate of <strong class="text-white font-mono">59.0%</strong> (49 survivors out of 83 children), decisively surpassing the adult baseline of 36.3%.
+            </p>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              This confirms operational execution of the second half of the evacuation mandate. However, socioeconomics still penetrated this safeguard.
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 flex flex-col gap-4">
+            <div class="p-6 rounded-2xl bg-gradient-to-br from-blueprint-900 to-blueprint-850 border border-blueprint-accent/30 text-center relative overflow-hidden">
+              <div class="text-xs font-mono text-slate-400 uppercase tracking-widest">Children (&lt;16 Yrs) Survival Rate</div>
+              <div class="text-5xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-200 to-emerald-300 font-mono my-2">
+                59.0%
+              </div>
+              <div class="text-xs font-mono text-slate-300">49 Saved out of 83 Manifest Children</div>
+
+              <div class="mt-5 pt-4 border-t border-blueprint-border/60 grid grid-cols-2 gap-4 text-left">
+                <div class="bg-blueprint-950/60 p-3 rounded-lg border border-emerald-500/30">
+                  <div class="text-[10px] font-mono text-slate-400">1st & 2nd Class Children</div>
+                  <div class="text-lg font-bold text-emerald-400 font-mono">100% (25/25)</div>
+                  <div class="text-[10px] text-slate-400">Total protection achieved</div>
+                </div>
+                <div class="bg-blueprint-950/60 p-3 rounded-lg border border-amber-500/30">
+                  <div class="text-[10px] font-mono text-slate-400">3rd Class Children</div>
+                  <div class="text-lg font-bold text-amber-400 font-mono">41.4% (24/58)</div>
+                  <div class="text-[10px] text-slate-400">Class penalty curtailed access</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blueprint-900/60 rounded-lg border border-blueprint-border text-xs text-slate-300 flex items-center justify-between font-mono">
+              <span class="text-slate-400">Adult Survival Rate (16+ Yrs):</span>
+              <span class="font-bold text-slate-200">36.3% (293 / 808)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>COHORT FILTER: AGE &lt; 16</span>
+          <span>100% EVACUATION COMPLIANCE FOR AFFLUENT MINORS</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 6: KINSHIP & FAMILY DYNAMICS ================= -->
+      <section id="slide-6" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">05 // COHESION DYNAMICS</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">Social Networks vs Isolation</span>
+          </div>
+          <span class="text-xs font-mono text-copper-400">+20.2% PROBABILITY BOOST</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+          <div class="lg:col-span-5 space-y-4">
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+              Social Support Networks Provided a Structural Shield
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Disaster mythology often claims that panic disintegrates social bonds into selfish individual clawing. Titanic records empirically disprove this.
+            </p>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Passengers traveling in family units survived at a substantially higher rate than solitary individuals, propelled by shared situational awareness, mutual assistance, and collective advocacy.
+            </p>
+            <div class="p-3.5 rounded-xl bg-copper-900/20 border border-copper-500/30">
+              <span class="text-xs font-mono text-copper-400 uppercase font-bold">Behavioral Mechanism</span>
+              <p class="text-xs text-slate-200 mt-1">Coordinated family units navigated flooding passageways together, securing lifeboat ingress far better than solo travelers.</p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Solo Passenger Card -->
+            <div class="p-5 sm:p-6 rounded-xl bg-blueprint-900/80 border border-slate-700 flex flex-col justify-between text-center space-y-4">
+              <div>
+                <div class="w-10 h-10 mx-auto rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono font-bold text-sm">
+                  1
+                </div>
+                <h3 class="text-base font-bold text-white mt-2">Solo Passengers</h3>
+                <span class="text-xs text-slate-400 font-mono">Zero Family Ties Aboard</span>
+              </div>
+
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-slate-300 font-mono">30.4%</div>
+                <span class="text-xs text-slate-400 font-mono">163 Survivors / 537 Cohort</span>
+              </div>
+
+              <div class="w-full bg-blueprint-950 h-2 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-slate-400 h-full rounded-full" style="width: 30.4%"></div>
+              </div>
+
+              <div class="text-xs text-rose-400 font-mono">
+                -8.0% Below Benchmark
+              </div>
+            </div>
+
+            <!-- Family Passenger Card -->
+            <div class="p-5 sm:p-6 rounded-xl bg-blueprint-900/80 border-2 border-copper-500/50 flex flex-col justify-between text-center space-y-4 shadow-xl shadow-copper-500/10">
+              <div>
+                <div class="w-10 h-10 mx-auto rounded-full bg-copper-500/20 text-copper-400 flex items-center justify-center font-mono font-bold text-sm">
+                  2+
+                </div>
+                <h3 class="text-base font-bold text-white mt-2">Family Units</h3>
+                <span class="text-xs text-slate-400 font-mono">Spouse, Siblings, Parents</span>
+              </div>
+
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-copper-400 font-mono">50.6%</div>
+                <span class="text-xs text-slate-400 font-mono">179 Survivors / 354 Cohort</span>
+              </div>
+
+              <div class="w-full bg-blueprint-950 h-2 rounded-full overflow-hidden border border-blueprint-border">
+                <div class="bg-gradient-to-r from-amber-500 to-copper-400 h-full rounded-full" style="width: 50.6%"></div>
+              </div>
+
+              <div class="text-xs text-emerald-400 font-mono font-bold">
+                +12.2% Above Benchmark
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>COHORT FIELD: SIBSP & PARCH COMBINATIONS</span>
+          <span>OPTIMAL SURVIVAL UNIT: 2 TO 4 MEMBERS</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 7: INTERSECTIONAL MATRIX ================= -->
+      <section id="slide-7" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">06 // INTERSECTIONAL MATRIX</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">Gender × Class Full Cross-Tabulation</span>
+          </div>
+          <span class="text-xs font-mono text-blueprint-accent">HEATMAP RANGE: 96.8% TO 13.5%</span>
+        </div>
+
+        <div class="space-y-4 my-auto">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-xl sm:text-3xl font-extrabold text-white">The Extremes of Survival</h2>
+              <p class="text-xs text-slate-300 mt-1">When privilege and protocol compound, the 38.4% baseline fractures to its mathematical limits.</p>
+            </div>
+            <div class="flex items-center gap-3 text-[11px] font-mono">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-500 inline-block"></span> High (&gt;90%)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500 inline-block"></span> Moderate (35-65%)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-rose-700 inline-block"></span> Critical (&lt;20%)</span>
+            </div>
+          </div>
+
+          <!-- Heatmap Table -->
+          <div class="overflow-x-auto rounded-xl border border-blueprint-border">
+            <table class="w-full text-left font-mono text-xs">
+              <thead class="bg-blueprint-900/95 text-slate-300 border-b border-blueprint-border">
+                <tr>
+                  <th class="p-3 font-semibold">TICKET CLASS</th>
+                  <th class="p-3 font-semibold text-rose-400">FEMALE COHORT</th>
+                  <th class="p-3 font-semibold text-sky-400">MALE COHORT</th>
+                  <th class="p-3 font-semibold text-slate-300">CLASS COMBINED</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-blueprint-border/50 bg-blueprint-950/80">
+                <!-- 1st Class -->
+                <tr class="hover:bg-blueprint-900/50 transition">
+                  <td class="p-3 font-bold text-white">1st Class (Elite)</td>
+                  <td class="p-3 bg-emerald-950/40 text-emerald-300 font-extrabold text-sm">
+                    96.8% <span class="text-[10px] text-slate-400 font-normal">(91/94)</span>
+                  </td>
+                  <td class="p-3 bg-amber-950/30 text-amber-300 font-bold">
+                    36.9% <span class="text-[10px] text-slate-400 font-normal">(45/122)</span>
+                  </td>
+                  <td class="p-3 font-bold text-slate-200">63.0%</td>
+                </tr>
+
+                <!-- 2nd Class -->
+                <tr class="hover:bg-blueprint-900/50 transition">
+                  <td class="p-3 font-bold text-white">2nd Class (Middle)</td>
+                  <td class="p-3 bg-emerald-950/40 text-emerald-300 font-extrabold text-sm">
+                    92.1% <span class="text-[10px] text-slate-400 font-normal">(70/76)</span>
+                  </td>
+                  <td class="p-3 bg-rose-950/40 text-rose-400 font-bold">
+                    15.7% <span class="text-[10px] text-slate-400 font-normal">(17/108)</span>
+                  </td>
+                  <td class="p-3 font-bold text-slate-200">47.3%</td>
+                </tr>
+
+                <!-- 3rd Class -->
+                <tr class="hover:bg-blueprint-900/50 transition">
+                  <td class="p-3 font-bold text-white">3rd Class (Steerage)</td>
+                  <td class="p-3 bg-amber-950/30 text-amber-300 font-bold">
+                    50.0% <span class="text-[10px] text-slate-400 font-normal">(72/144)</span>
+                  </td>
+                  <td class="p-3 bg-red-950/70 text-rose-400 font-extrabold text-sm">
+                    13.5% <span class="text-[10px] text-slate-400 font-normal">(47/347)</span>
+                  </td>
+                  <td class="p-3 font-bold text-slate-200">24.2%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Highlight Extremes -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="p-3.5 rounded-lg bg-blueprint-900/60 border border-emerald-500/40 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-emerald-400 uppercase font-bold">MAXIMUM SURVIVAL PROBABILITY</span>
+                <div class="text-sm font-bold text-white">1st-Class Females</div>
+                <div class="text-[11px] text-slate-400 font-mono">Privilege + Maritime Protocol</div>
+              </div>
+              <div class="text-3xl font-extrabold text-emerald-400 font-mono">96.8%</div>
+            </div>
+
+            <div class="p-3.5 rounded-lg bg-blueprint-900/60 border border-disaster-red/40 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-rose-400 uppercase font-bold">MINIMUM SURVIVAL PROBABILITY</span>
+                <div class="text-sm font-bold text-white">3rd-Class Males</div>
+                <div class="text-[11px] text-slate-400 font-mono">Compounded Structural Penalties</div>
+              </div>
+              <div class="text-3xl font-extrabold text-rose-400 font-mono">13.5%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>7.17x ABSOLUTE DELTA BETWEEN EXTREME COHORTS</span>
+          <span>SYSTEMIC ADVANTAGE EQUALS PREDICTABILITY</span>
+        </div>
+      </section>
+
+      <!-- ================= SLIDE 8: THE BLUEPRINT & EXECUTIVE CONCLUSION ================= -->
+      <section id="slide-8" class="slide-view slide-inactive w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 blueprint-box corner-bracket rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between border-b border-blueprint-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono text-copper-400 font-bold">07 // EXECUTIVE SYNTHESIS</span>
+            <span class="text-xs text-slate-400 hidden sm:inline">The Final Sociological Formula</span>
+          </div>
+          <span class="text-xs font-mono text-copper-400">FINAL VERDICT</span>
+        </div>
+
+        <div class="my-auto space-y-5">
+          <div class="text-center max-w-2xl mx-auto space-y-1">
+            <span class="text-xs font-mono uppercase tracking-widest text-blueprint-accent">Engineered Disparity</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+              The Blueprint of a Survivor
+            </h2>
+            <p class="text-xs text-slate-300">Each demographic layer compounded sequentially until the final outcome emerged.</p>
+          </div>
+
+          <!-- Formula Step Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
+            <div class="p-3 rounded-xl bg-blueprint-900/80 border border-blueprint-border">
+              <span class="text-[10px] font-mono text-slate-400 uppercase">1. Baseline</span>
+              <div class="text-xl font-extrabold text-white font-mono mt-1">38.4%</div>
+              <span class="text-[10px] text-slate-400 block mt-0.5 font-mono">Reality Anchor</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-blueprint-900/80 border border-rose-500/30">
+              <span class="text-[10px] font-mono text-rose-400 uppercase">+ Protocol</span>
+              <div class="text-xl font-extrabold text-rose-400 font-mono mt-1">Female</div>
+              <span class="text-[10px] text-slate-400 block mt-0.5 font-mono">+35.8% Filter</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-blueprint-900/80 border border-indigo-500/30">
+              <span class="text-[10px] font-mono text-indigo-400 uppercase">+ Proximity</span>
+              <div class="text-xl font-extrabold text-indigo-400 font-mono mt-1">1st Class</div>
+              <span class="text-[10px] text-slate-400 block mt-0.5 font-mono">+24.6% Lift</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-blueprint-900/80 border border-amber-500/30">
+              <span class="text-[10px] font-mono text-amber-400 uppercase">+ Support</span>
+              <div class="text-xl font-extrabold text-amber-400 font-mono mt-1">Family</div>
+              <span class="text-[10px] text-slate-400 block mt-0.5 font-mono">+12.2% Boost</span>
+            </div>
+
+            <div class="col-span-2 sm:col-span-1 p-3 rounded-xl bg-copper-500/20 border-2 border-copper-400">
+              <span class="text-[10px] font-mono text-copper-300 uppercase font-bold">= Likelihood</span>
+              <div class="text-xl font-extrabold text-copper-300 font-mono mt-1">96.8%</div>
+              <span class="text-[10px] text-copper-200 block mt-0.5 font-mono">Near Certainty</span>
+            </div>
+          </div>
+
+          <!-- Master Takeaway Block -->
+          <div class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blueprint-900 via-slate-900 to-blueprint-900 border-2 border-copper-500/40 text-center max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
+            <div class="text-xs font-mono tracking-widest text-copper-400 uppercase font-bold mb-2">The Core Sociological Law</div>
+            <blockquote class="text-lg sm:text-2xl font-bold text-white tracking-tight italic">
+              "Crises do not erase social structures; they amplify them."
+            </blockquote>
+            <p class="text-xs sm:text-sm text-slate-300 mt-2.5 max-w-2xl mx-auto leading-relaxed">
+              Beneath the cultural myth of random tragedy, data demonstrates an unyielding execution of protocol and socioeconomic advantage. The final determinant was never merely the sea, but the societal structure that entered it.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 border-t border-blueprint-border/40 pt-3">
+          <span>PRESENTATION CONCLUDED</span>
+          <span>THANK YOU // OPEN FOR EXECUTIVE INQUIRY</span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="h-16 border-t border-blueprint-border/80 bg-blueprint-900/90 backdrop-blur-md px-4 sm:px-8 flex items-center justify-between z-50">
+    <!-- Progress Indicator Dots -->
+    <div class="flex items-center space-x-1.5 sm:space-x-2" id="footer-indicators">
+      <!-- Dots injected dynamically -->
+    </div>
+
+    <!-- Direction Navigation Buttons -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <button id="btn-prev" class="flex items-center gap-1 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-blueprint-800 hover:bg-blueprint-750 disabled:opacity-30 disabled:cursor-not-allowed border border-blueprint-border text-xs font-mono text-slate-200 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <span class="hidden sm:inline">PREV</span>
+      </button>
+
+      <button id="btn-next" class="flex items-center gap-1 px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg bg-copper-600 hover:bg-copper-500 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-mono font-bold text-white shadow-lg shadow-copper-600/30 transition">
+        <span>NEXT</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <div id="slide-drawer" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 sm:p-6">
+    <div class="bg-blueprint-900 border border-blueprint-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
+      <div class="flex justify-between items-center border-b border-blueprint-border pb-3">
+        <h3 class="text-sm sm:text-base font-bold text-white font-mono flex items-center gap-2">
+          <span>📑</span> SLIDE DIRECTORY & TOPIC JUMP
+        </h3>
+        <button id="btn-close-drawer" class="text-slate-400 hover:text-white text-xl font-mono px-2">&times;</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[60vh] overflow-y-auto pr-1" id="drawer-slide-items">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="text-[11px] font-mono text-slate-500 text-center pt-2">
+        Tip: Use Arrow Keys or Spacebar anytime to browse slides.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const deckData = [
+      { id: 'slide-1', title: '01. Title & Thesis', subtitle: 'Deconstructing Systematic Survival' },
+      { id: 'slide-2', title: '02. Baseline Reality', subtitle: '891 Manifest Pool & 38.4% Anchor' },
+      { id: 'slide-3', title: '03. The Gender Protocol', subtitle: '3.9x Multiplier (74.2% vs 18.9%)' },
+      { id: 'slide-4', title: '04. Class & Physical Proximity', subtitle: 'Cabin Elevation (63% to 24.2%)' },
+      { id: 'slide-5', title: '05. Age Acceleration', subtitle: 'Children (<16) 59.0% Survival' },
+      { id: 'slide-6', title: '06. Family Dynamics', subtitle: 'Kinship Shield (+20.2% Boost)' },
+      { id: 'slide-7', title: '07. Intersectional Matrix', subtitle: '96.8% (1st F) vs 13.5% (3rd M)' },
+      { id: 'slide-8', title: '08. The Blueprint Formula', subtitle: 'Final Synthesis & Sociological Law' }
+    ];
+
+    let currentSlide = 0;
+    const totalSlides = deckData.length;
+
+    // DOM Elements
+    const curSlideEl = document.getElementById('header-cur-slide');
+    const totSlideEl = document.getElementById('header-tot-slide');
+    const prevBtn = document.getElementById('btn-prev');
+    const nextBtn = document.getElementById('btn-next');
+    const indicatorsWrap = document.getElementById('footer-indicators');
+    const slideDrawer = document.getElementById('slide-drawer');
+    const drawerItemsWrap = document.getElementById('drawer-slide-items');
+    const indexToggleBtn = document.getElementById('btn-index-toggle');
+    const closeDrawerBtn = document.getElementById('btn-close-drawer');
+    const fullscreenBtn = document.getElementById('btn-fullscreen');
+    const copyStatsBtn = document.getElementById('btn-copy-stats');
+    const copyTextLabel = document.getElementById('copy-text-label');
+
+    // Generate Footer Indicators
+    deckData.forEach((item, idx) => {
+      const dot = document.createElement('button');
+      dot.className = `h-2 rounded-full transition-all duration-300 ${idx === 0 ? 'w-8 bg-copper-500' : 'w-2.5 bg-slate-700 hover:bg-slate-500'}`;
+      dot.title = item.title;
+      dot.addEventListener('click', () => goToSlide(idx));
+      indicatorsWrap.appendChild(dot);
+    });
+
+    // Generate Drawer Cards
+    deckData.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = `p-3 rounded-lg border cursor-pointer transition text-left ${idx === 0 ? 'bg-copper-500/15 border-copper-500 text-copper-300' : 'bg-blueprint-950/70 border-blueprint-border text-slate-300 hover:border-blueprint-accent'}`;
+      card.innerHTML = `
+        <div class="text-xs font-mono font-bold">${item.title}</div>
+        <div class="text-[11px] text-slate-400 mt-0.5">${item.subtitle}</div>
+      `;
+      card.addEventListener('click', () => {
+        goToSlide(idx);
+        slideDrawer.classList.add('hidden');
+      });
+      drawerItemsWrap.appendChild(card);
+    });
+
+    // Update Presentation View
+    function renderSlideState() {
+      deckData.forEach((item, idx) => {
+        const el = document.getElementById(item.id);
+        if (idx === currentSlide) {
+          el.classList.remove('slide-inactive');
+          el.classList.add('slide-current');
+        } else {
+          el.classList.remove('slide-current');
+          el.classList.add('slide-inactive');
+        }
+      });
+
+      curSlideEl.textContent = String(currentSlide + 1).padStart(2, '0');
+      totSlideEl.textContent = String(totalSlides).padStart(2, '0');
+
+      // Update indicators
+      Array.from(indicatorsWrap.children).forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.className = 'h-2 w-8 rounded-full bg-copper-500 transition-all duration-300';
+        } else {
+          dot.className = 'h-2 w-2.5 rounded-full bg-slate-700 hover:bg-slate-500 transition-all duration-300';
+        }
+      });
+
+      // Update nav button states
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+
+      // Update drawer selection styling
+      Array.from(drawerItemsWrap.children).forEach((card, idx) => {
+        if (idx === currentSlide) {
+          card.className = 'p-3 rounded-lg border cursor-pointer transition text-left bg-copper-500/15 border-copper-500 text-copper-300';
+        } else {
+          card.className = 'p-3 rounded-lg border cursor-pointer transition text-left bg-blueprint-950/70 border-blueprint-border text-slate-300 hover:border-blueprint-accent';
+        }
+      });
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        renderSlideState();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        goToSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+
+    // Keyboard Bindings
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+      } else if (e.key === 'Escape') {
+        slideDrawer.classList.add('hidden');
+      }
+    });
+
+    // Touch Swipe Navigation for Mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    window.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      if (touchEndX - touchStartX > 50) prevSlide();
+    }, { passive: true });
+
+    // Button Listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    indexToggleBtn.addEventListener('click', () => {
+      slideDrawer.classList.toggle('hidden');
+    });
+    closeDrawerBtn.addEventListener('click', () => {
+      slideDrawer.classList.add('hidden');
+    });
+    slideDrawer.addEventListener('click', (e) => {
+      if (e.target === slideDrawer) slideDrawer.classList.add('hidden');
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    });
+
+    // Safe Clipboard Copy Handler
+    copyStatsBtn.addEventListener('click', () => {
+      const summaryText = `RMS TITANIC SURVIVAL BENCHMARKS:
+- Overall: 38.4% (342 survivors / 891 manifest)
+- Female: 74.2% (3.9x Multiplier over Male: 18.9%)
+- 1st Class: 63.0% | 2nd Class: 47.3% | 3rd Class: 24.2%
+- Children (<16 yrs): 59.0% (100% in 1st/2nd Class)
+- Family Units: 50.6% (+20.2% over Solo: 30.4%)
+- Extreme High: 1st-Class Females (96.8%)
+- Extreme Low: 3rd-Class Males (13.5%)`;
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = summaryText;
+      tempTextArea.style.position = 'fixed';
+      tempTextArea.style.opacity = '0';
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      try {
+        document.execCommand('copy');
+        const originalText = copyTextLabel.textContent;
+        copyTextLabel.textContent = 'Copied!';
+        setTimeout(() => {
+          copyTextLabel.textContent = originalText;
+        }, 2000);
+      } catch (err) {
+        // Fallback silently
+      }
+      document.body.removeChild(tempTextArea);
+    });
+
+    // Initial Trigger
+    renderSlideState();
+  </script>
+</body>
+</html>
